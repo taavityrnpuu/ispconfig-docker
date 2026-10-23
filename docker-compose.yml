@@ -1,0 +1,52 @@
+services:
+  ispconfig:
+    build: .
+    image: ispconfig:latest
+    container_name: ispconfig
+    hostname: server1.example.com   # set to your real FQDN
+    restart: unless-stopped
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+      - SYS_MODULE
+      - NET_RAW
+    security_opt:
+      - seccomp:unconfined
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volumes:
+      - www:/var/www
+      - vmail:/var/vmail
+      - db:/var/lib/mysql
+      - journal:/var/log/journal
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpw
+      - ISP_DB_PASSWORD=isppw
+      - ISP_CONFIG_VERSION=3.2.12p1
+    ports:
+      - "2222:22"
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+      - "25:25"
+      - "465:465"
+      - "587:587"
+      - "110:110"
+      - "995:995"
+      - "143:143"
+      - "993:993"
+      - "21:21"
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "5232:5232"
+      - "20000-21000:20000-21000"
+    stop_grace_period: 1m
+
+volumes:
+  www:
+  vmail:
+  db:
+  journal:

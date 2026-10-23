@@ -1,0 +1,15 @@
+[Unit]
+Description=ISPConfig unattended install (first boot only)
+ConditionPathExists=!/usr/local/ispconfig/ispconfig_installed
+Wants=network-online.target mariadb.service
+After=network-online.target mariadb.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/local/bin/ispconfig-install.sh
+StandardOutput=journal+console
+StandardError=journal+console
+
+[Install]
+WantedBy=multi-user.target
